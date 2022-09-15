@@ -1,3 +1,4 @@
+import decimal
 import secrets
 from random import randrange
 from django.db import models
@@ -27,7 +28,7 @@ class Coupon(models.Model):
         저장시 unique 한 coupon code 생성
         """
         if self.code is None:
-            random_num = str(randrange(100000,9999999))
+            random_num = str(randrange(100000, 9999999))
             print(random_num)
             upper_alpha = "ABCDEFGHJKLMNPQRSTVWXYZ"
             random_str = "".join(secrets.choice(upper_alpha) for i in range(15))
@@ -45,11 +46,9 @@ class CouponType(models.Model):
     """
     name = models.CharField(max_length=20)
     percent_discount = models.FloatField(default=0, null=True, blank=True)
-    absolute_discount = models.DecimalField(default=0,
-                                            null=True,
-                                            blank=True,
-                                            max_digits=6,
-                                            decimal_places=2)
+    absolute_discount = models.FloatField(default=0,
+                                          null=True,
+                                          blank=True, )
 
     def get_total_discount(self):
         if self.percent_discount and self.absolute_discount:
@@ -79,11 +78,11 @@ class OrderHistory(TimeStampedModel):
     # 제품의 수량
     quantity = models.PositiveIntegerField()
     # 배송비
-    dilivery_price = models.DecimalField(max_digits=6, decimal_places=2)
+    dilivery_price = models.FloatField(blank=True)
     # 주문 건에 대한 최종 결제가격
-    total_price = models.DecimalField(max_digits=6, decimal_places=2)
+    total_price = models.FloatField(blank=True)
     # 사용한 쿠폰 id
-    coupon = models.OneToOneField('Coupon', on_delete=models.SET_NULL, null=True)
+    coupon = models.OneToOneField('Coupon', on_delete=models.SET_NULL, null=True, blank=True)
 
     # 배송상태
     class DiliveryStateChoices(models.TextChoices):
@@ -98,6 +97,62 @@ class OrderHistory(TimeStampedModel):
 
     def __str__(self):
         return f'<OrderHistory Object : {self.product.name}X{self.quantity} To {self.order_place.country}, {self.total_price}$>'
+
+    def save(self, *args, **kwargs):
+        """
+        쿠폰이 있을 시, 할인가 적용
+        지역, 갯수에 따른 배송비를 계산 후 저장
+        할인가, 배송비에 따른 최종 결제금액 계산 후 저장
+
+        (정상가(제품가격*개수) + 정상배송가) - (쿠폰 있을 시 할인 적용)
+
+        임의로 정한 배송비 정책:
+        country_code 의 country_decode 를 기준으로,
+        코드가 1 이면 기본 배송비 10달러,
+        7~90 이면 기본 배송비 15달러,
+        91~299 이면 기본 배송비 20달러,
+        350~599 이면 기본 배송비 25달러,
+        670~692 이면 기본 배송비 30달러,
+        850~998 이면 기본 배송비 35달러 차등 적용
+        """
+
+        default_price = self.product.price * self.quantity
+
+        if self.order_place.country.country_tell_code == "1":
+            default_dilivery_price = 10
+        elif 7 <= self.order_place.country.country_tell_code <= 90:
+            default_dilivery_price = 15
+        elif 91 < self.order_place.country.country_tell_code <= 299:
+            default_dilivery_price = 20
+        elif 350 <= self.order_place.country.country_tell_code <= 599:
+            default_dilivery_price = 25
+        elif 670 <= self.order_place.country.country_tell_code <= 692:
+            default_dilivery_price = 30
+        elif 850 <= self.order_place.country.country_tell_code <= 998:
+            default_dilivery_price = 35
+        self.dilivery_price = default_dilivery_price
+
+        # 쿠폰이 있으면
+        if self.coupon:
+            # 퍼센트 할인 적용, 정액 할인 적용이 둘 다 있는 쿠폰이라면, 정액 할인 적용 후 퍼센트 할인 적용
+            if self.coupon.coupon_type.percent_discount and self.coupon.coupon_type.absolute_discount:
+                result_price = (default_price + default_dilivery_price - self.coupon.coupon_type.absolute_discount) * (
+                        1 - self.coupon.coupon_type.percent_discount / 100)
+            # 퍼센트 할인만 있는 쿠폰이라면, 퍼센트 할인만 적용
+            elif self.coupon.coupon_type.percent_discount and self.coupon.coupon_type.absolute_discount is None:
+                result_price = default_price + default_dilivery_price * (
+                        1 - self.coupon.coupon_type.percent_discount / 100)
+            # 정액 할인만 있는 쿠폰이라면, 정액 할인만 적용
+            elif self.coupon.coupon_type.percent_discount is None and self.coupon.coupon_type.absolute_discount:
+                result_price = default_price + default_dilivery_price - self.coupon.coupon_type.absolute_discount
+            if result_price < 0:
+                self.total_price = 0
+            else:
+                self.total_price = result_price
+        else:
+            self.total_price = default_price + default_dilivery_price
+
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Order Histories"
@@ -135,7 +190,7 @@ class Country(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.FloatField()
 
     def __str__(self):
         return f'<Product Object : {self.name}>'
