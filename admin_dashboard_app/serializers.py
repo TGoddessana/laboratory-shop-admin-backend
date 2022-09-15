@@ -1,5 +1,34 @@
 from rest_framework import serializers
-from .models import Coupon, CouponType
+from .models import Coupon, CouponType, OrderHistory, OrderPlace
+
+
+class OrderHistorySerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+    order_place_id = serializers.PrimaryKeyRelatedField(source='order_place',
+                                                        queryset=OrderPlace.objects.all(),
+                                                        write_only=True)
+    order_place = serializers.SerializerMethodField()
+    dilivery_price = serializers.FloatField(read_only=True)
+    total_price = serializers.FloatField(read_only=True)
+
+    class Meta:
+        model = OrderHistory
+        fields = ["id",
+                  "created_at",
+                  "updated_at",
+                  "pay_state",
+                  "quantity",
+                  "dilivery_price",
+                  "total_price",
+                  "dilivery_status",
+                  "product",
+                  "coupon",
+                  "order_place",
+                  "order_place_id"]
+
+    def get_order_place(self, obj):
+        return obj.order_place.get_full_name()
 
 
 class CouponSerializer(serializers.ModelSerializer):
@@ -31,14 +60,13 @@ class CouponTypeSerializer(serializers.ModelSerializer):
     # 쿠폰 타입의 사용내역에 관한 정보.
     coupon_type_history_info = serializers.SerializerMethodField()
 
-
     class Meta:
         model = CouponType
         fields = ["id",
                   "name",
                   "percent_discount",
                   "absolute_discount",
-                  "coupon_type_history_info",]
+                  "coupon_type_history_info", ]
 
     def get_coupon_type_history_info(self, obj):
         return {"all_coupon_set_count": obj.get_all_coupon_set_count(),

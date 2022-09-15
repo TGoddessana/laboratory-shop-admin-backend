@@ -1,6 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import Coupon, CouponType
-from .serializers import CouponSerializer, CouponTypeSerializer
+from .models import Coupon, CouponType, OrderHistory
+from .serializers import CouponSerializer, CouponTypeSerializer, OrderHistorySerializer
+
+
+class OrderHistoryViewset(ModelViewSet):
+    queryset = OrderHistory.objects.all()
+    serializer_class = OrderHistorySerializer
 
 
 class CouponViewSet(ModelViewSet):

@@ -169,19 +169,19 @@ class OrderHistory(TimeStampedModel):
         if self.order_place.country.country_tell_code == "1":
             default_dilivery_price = 10
             self.dilivery_price = default_dilivery_price
-        elif 7 <= self.order_place.country.country_tell_code <= 90:
+        elif 1 <= self.order_place.country.country_tell_code < 90:
             default_dilivery_price = 15
             self.dilivery_price = default_dilivery_price
-        elif 91 < self.order_place.country.country_tell_code <= 299:
+        elif 91 < self.order_place.country.country_tell_code < 299:
             default_dilivery_price = 20
             self.dilivery_price = default_dilivery_price
-        elif 350 <= self.order_place.country.country_tell_code <= 599:
+        elif 300 <= self.order_place.country.country_tell_code < 599:
             default_dilivery_price = 25
             self.dilivery_price = default_dilivery_price
-        elif 670 <= self.order_place.country.country_tell_code <= 692:
+        elif 599 <= self.order_place.country.country_tell_code < 692:
             default_dilivery_price = 30
             self.dilivery_price = default_dilivery_price
-        elif 850 <= self.order_place.country.country_tell_code <= 998:
+        elif 692 <= self.order_place.country.country_tell_code < 1000:
             default_dilivery_price = 35
             self.dilivery_price = default_dilivery_price
 
@@ -230,6 +230,9 @@ class OrderPlace(models.Model):
     city = models.CharField(max_length=150)
     # 우편번호
     zip_code = models.CharField(max_length=20)
+
+    def get_full_name(self):
+        return f"{self.country.country_name}, {self.city}, {self.zip_code}"
 
     def __str__(self):
         return f'<OrderPlace Object : {self.country.country_name} {self.city} {self.zip_code}>'
