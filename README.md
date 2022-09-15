@@ -119,138 +119,139 @@
 - 응답 예시:
 
 
-    [
-        {
-            "id": 1,
-            "created_at": "2022-09-15T01:05:14.945487Z",
-            "updated_at": "2022-09-15T01:05:14.945501Z",
-            "pay_state": true,
-            "quantity": 2,
-            "dilivery_price": 15.0,
-            "total_price": 6.690000000000006,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "hyundai damas",
-            "coupon": null,
-            "order_place": "Vatican City, Seoul, 123412"
-        },
-        {
-            "id": 2,
-            "created_at": "2022-09-15T01:06:40.821145Z",
-            "updated_at": "2022-09-15T01:11:57.831552Z",
-            "pay_state": true,
-            "quantity": 1,
-            "dilivery_price": 20.0,
-            "total_price": 100.07990000000008,
-            "dilivery_status": "ready to ship",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": null,
-            "order_place": "Angola, lorem, 21335"
-        },
-        {
-            "id": 3,
-            "created_at": "2022-09-15T06:14:33.110889Z",
-            "updated_at": "2022-09-15T06:14:33.110938Z",
-            "pay_state": true,
-            "quantity": 40,
-            "dilivery_price": 15.0,
-            "total_price": 400014.6,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": null,
-            "order_place": "Vatican City, Seoul, 123412"
-        },
-        {
-            "id": 4,
-            "created_at": "2022-09-15T06:47:34.271949Z",
-            "updated_at": "2022-09-15T06:54:16.897912Z",
-            "pay_state": true,
-            "quantity": 2,
-            "dilivery_price": 15.0,
-            "total_price": 17803.5422,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": 5,
-            "order_place": "Vatican City, Seoul, 123412"
-        },
-        {
-            "id": 5,
-            "created_at": "2022-09-15T07:10:46.174811Z",
-            "updated_at": "2022-09-15T07:10:46.174885Z",
-            "pay_state": true,
-            "quantity": 444,
-            "dilivery_price": 20.0,
-            "total_price": 147872.0,
-            "dilivery_status": "ready to ship",
-            "product_name": "hyundai damas",
-            "coupon": null,
-            "order_place": "Angola, lorem, 21335"
-        },
-        {
-            "id": 6,
-            "created_at": "2022-09-15T07:27:44.298130Z",
-            "updated_at": "2022-09-15T07:27:59.316684Z",
-            "pay_state": true,
-            "quantity": 1,
-            "dilivery_price": 20.0,
-            "total_price": 10007.99,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": null,
-            "order_place": "Angola, lorem, 21335"
-        },
-        {
-            "id": 7,
-            "created_at": "2022-09-15T13:26:33.422852Z",
-            "updated_at": "2022-09-15T13:26:48.018483Z",
-            "pay_state": true,
-            "quantity": 77,
-            "dilivery_price": 15.0,
-            "total_price": 770002.23,
-            "dilivery_status": "shipping complete",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": 13,
-            "order_place": "Vatican City, Seoul, 123412"
-        },
-        {
-            "id": 8,
-            "created_at": "2022-09-15T17:03:06.524611Z",
-            "updated_at": "2022-09-15T17:03:06.524675Z",
-            "pay_state": true,
-            "quantity": 1,
-            "dilivery_price": 15.0,
-            "total_price": 10014.99,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": null,
-            "order_place": "Vatican City, Seoul, 123412"
-        },
-        {
-            "id": 9,
-            "created_at": "2022-09-15T17:03:13.109615Z",
-            "updated_at": "2022-09-15T17:03:13.109710Z",
-            "pay_state": true,
-            "quantity": 1,
-            "dilivery_price": 15.0,
-            "total_price": 10014.99,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "Rolls Royce Phantom Series II",
-            "coupon": null,
-            "order_place": "Vatican City, Seoul, 123412"
-        },
-        {
-            "id": 10,
-            "created_at": "2022-09-15T17:05:16.780218Z",
-            "updated_at": "2022-09-15T17:05:16.780323Z",
-            "pay_state": true,
-            "quantity": 11,
-            "dilivery_price": 15.0,
-            "total_price": 14546.0,
-            "dilivery_status": "preparing for shipping",
-            "product_name": "kia morning",
-            "coupon": null,
-            "order_place": "Vatican City, Seoul, 123412"
-        }
-    ]
+```[
+    {
+        "id": 1,
+        "created_at": "2022-09-15T01:05:14.945487Z",
+        "updated_at": "2022-09-15T01:05:14.945501Z",
+        "pay_state": true,
+        "quantity": 2,
+        "dilivery_price": 15.0,
+        "total_price": 6.690000000000006,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "hyundai damas",
+        "coupon": null,
+        "order_place": "Vatican City, Seoul, 123412"
+    },
+    {
+        "id": 2,
+        "created_at": "2022-09-15T01:06:40.821145Z",
+        "updated_at": "2022-09-15T01:11:57.831552Z",
+        "pay_state": true,
+        "quantity": 1,
+        "dilivery_price": 20.0,
+        "total_price": 100.07990000000008,
+        "dilivery_status": "ready to ship",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": null,
+        "order_place": "Angola, lorem, 21335"
+    },
+    {
+        "id": 3,
+        "created_at": "2022-09-15T06:14:33.110889Z",
+        "updated_at": "2022-09-15T06:14:33.110938Z",
+        "pay_state": true,
+        "quantity": 40,
+        "dilivery_price": 15.0,
+        "total_price": 400014.6,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": null,
+        "order_place": "Vatican City, Seoul, 123412"
+    },
+    {
+        "id": 4,
+        "created_at": "2022-09-15T06:47:34.271949Z",
+        "updated_at": "2022-09-15T06:54:16.897912Z",
+        "pay_state": true,
+        "quantity": 2,
+        "dilivery_price": 15.0,
+        "total_price": 17803.5422,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": 5,
+        "order_place": "Vatican City, Seoul, 123412"
+    },
+    {
+        "id": 5,
+        "created_at": "2022-09-15T07:10:46.174811Z",
+        "updated_at": "2022-09-15T07:10:46.174885Z",
+        "pay_state": true,
+        "quantity": 444,
+        "dilivery_price": 20.0,
+        "total_price": 147872.0,
+        "dilivery_status": "ready to ship",
+        "product_name": "hyundai damas",
+        "coupon": null,
+        "order_place": "Angola, lorem, 21335"
+    },
+    {
+        "id": 6,
+        "created_at": "2022-09-15T07:27:44.298130Z",
+        "updated_at": "2022-09-15T07:27:59.316684Z",
+        "pay_state": true,
+        "quantity": 1,
+        "dilivery_price": 20.0,
+        "total_price": 10007.99,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": null,
+        "order_place": "Angola, lorem, 21335"
+    },
+    {
+        "id": 7,
+        "created_at": "2022-09-15T13:26:33.422852Z",
+        "updated_at": "2022-09-15T13:26:48.018483Z",
+        "pay_state": true,
+        "quantity": 77,
+        "dilivery_price": 15.0,
+        "total_price": 770002.23,
+        "dilivery_status": "shipping complete",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": 13,
+        "order_place": "Vatican City, Seoul, 123412"
+    },
+    {
+        "id": 8,
+        "created_at": "2022-09-15T17:03:06.524611Z",
+        "updated_at": "2022-09-15T17:03:06.524675Z",
+        "pay_state": true,
+        "quantity": 1,
+        "dilivery_price": 15.0,
+        "total_price": 10014.99,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": null,
+        "order_place": "Vatican City, Seoul, 123412"
+    },
+    {
+        "id": 9,
+        "created_at": "2022-09-15T17:03:13.109615Z",
+        "updated_at": "2022-09-15T17:03:13.109710Z",
+        "pay_state": true,
+        "quantity": 1,
+        "dilivery_price": 15.0,
+        "total_price": 10014.99,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "Rolls Royce Phantom Series II",
+        "coupon": null,
+        "order_place": "Vatican City, Seoul, 123412"
+    },
+    {
+        "id": 10,
+        "created_at": "2022-09-15T17:05:16.780218Z",
+        "updated_at": "2022-09-15T17:05:16.780323Z",
+        "pay_state": true,
+        "quantity": 11,
+        "dilivery_price": 15.0,
+        "total_price": 14546.0,
+        "dilivery_status": "preparing for shipping",
+        "product_name": "kia morning",
+        "coupon": null,
+        "order_place": "Vatican City, Seoul, 123412"
+    }
+]
+```
 
 
 ### POST /api/v1/admin-dashboard/order-histories/
@@ -258,32 +259,36 @@
 - 요청 예시: 해당 데이터들을 body에 담아 보냅니다.
 
 
-    {
-        "pay_state": true,
-        "quantity": 2,
-        "dilivery_price": 15.0,
-        "dilivery_status": "preparing for shipping",
-        "product_id": 2,
-        "coupon": null,
-        "order_place_id": 1
-    }
+```
+{
+  "pay_state": true,
+  "quantity": 2,
+  "dilivery_price": 15.0,
+  "dilivery_status": "preparing for shipping",
+  "product_id": 2,
+  "coupon": null,
+  "order_place_id": 1
+}
+```
 
 - 응답 예시: 아래와 같이 생성된 주문내역의 정보를 응답합니다.
 
 
-    {
-        "id": 11,
-        "created_at": "2022-09-15T18:17:24.993197Z",
-        "updated_at": "2022-09-15T18:17:24.993239Z",
-        "pay_state": true,
-        "quantity": 2,
-        "dilivery_price": 15.0,
-        "total_price": 681.0,
-        "dilivery_status": "preparing for shipping",
-        "product_name": "hyundai damas",
-        "coupon": null,
-        "order_place": "Vatican City, Seoul, 123412"
-    }
+```
+{
+  "id": 11,
+  "created_at": "2022-09-15T18:17:24.993197Z",
+  "updated_at": "2022-09-15T18:17:24.993239Z",
+  "pay_state": true,
+  "quantity": 2,
+  "dilivery_price": 15.0,
+  "total_price": 681.0,
+  "dilivery_status": "preparing for shipping",
+  "product_name": "hyundai damas",
+  "coupon": null,
+  "order_place": "Vatican City, Seoul, 123412"
+}
+```
 
 
 ### GET /api/v1/admin-dashboard/order-histories/{id}/
@@ -291,53 +296,55 @@
 - 응답 예시:
 
 
-    {
-        "id": 11,
-        "created_at": "2022-09-15T18:17:24.993197Z",
-        "updated_at": "2022-09-15T18:21:29.503441Z",
-        "pay_state": false,
-        "quantity": 2,
-        "dilivery_price": 15.0,
-        "total_price": 681.0,
-        "dilivery_status": "preparing for shipping",
-        "product_name": "hyundai damas",
-        "coupon": null,
-        "order_place": "Vatican City, Seoul, 123412"
-    }
-
+```    
+{
+  "id": 11,
+  "created_at": "2022-09-15T18:17:24.993197Z",
+  "updated_at": "2022-09-15T18:21:29.503441Z",
+  "pay_state": false,
+  "quantity": 2,
+  "dilivery_price": 15.0,
+  "total_price": 681.0,
+  "dilivery_status": "preparing for shipping",
+  "product_name": "hyundai damas",
+  "coupon": null,
+  "order_place": "Vatican City, Seoul, 123412"
+}
+```
 
 ### PUT /api/v1/admin-dashboard/order-histories/{id}/
 - 주문내역이 존재한다면 수정하고, 존재하지 않는다면 생성합니다.
 - 요청 예시: 해당 데이터들을 body에 담아 보냅니다.
 
-
-    {
-        "pay_state": false,
-        "quantity": 2,
-        "dilivery_price": 15.0,
-        "dilivery_status": "preparing for shipping",
-        "product_id": 2,
-        "coupon": null,
-        "order_place_id": 1
-    }
-
+```
+{
+  "pay_state": false,
+  "quantity": 2,
+  "dilivery_price": 15.0,
+  "dilivery_status": "preparing for shipping",
+  "product_id": 2,
+  "coupon": null,
+  "order_place_id": 1
+}
+```
 - 응답 예시 : 아래와 같이 수정된 주문내역의 정보를 응답합니다.
 
 
-    {
-        "id": 11,
-        "created_at": "2022-09-15T18:17:24.993197Z",
-        "updated_at": "2022-09-15T18:21:29.503441Z",
-        "pay_state": false,
-        "quantity": 2,
-        "dilivery_price": 15.0,
-        "total_price": 681.0,
-        "dilivery_status": "preparing for shipping",
-        "product_name": "hyundai damas",
-        "coupon": null,
-        "order_place": "Vatican City, Seoul, 123412"
-    }
-
+```    
+{
+  "id": 11,
+  "created_at": "2022-09-15T18:17:24.993197Z",
+  "updated_at": "2022-09-15T18:21:29.503441Z",
+  "pay_state": false,
+  "quantity": 2,
+  "dilivery_price": 15.0,
+  "total_price": 681.0,
+  "dilivery_status": "preparing for shipping",
+  "product_name": "hyundai damas",
+  "coupon": null,
+  "order_place": "Vatican City, Seoul, 123412"
+}
+```
 
 ### DELETE /api/v1/admin-dashboard/order-histories/{id}/
 - id로 특정되는 주문내역을 삭제합니다.
