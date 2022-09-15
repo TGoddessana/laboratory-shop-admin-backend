@@ -27,12 +27,11 @@ class Coupon(models.Model):
         """
         저장시 unique 한 coupon code 생성
         """
-        if self.code is None:
-            random_num = str(randrange(100000, 9999999))
-            print(random_num)
-            upper_alpha = "ABCDEFGHJKLMNPQRSTVWXYZ"
-            random_str = "".join(secrets.choice(upper_alpha) for i in range(15))
-            self.code = (random_str + random_num)[-15:]
+        random_num = str(randrange(100000, 9999999))
+        print(random_num)
+        upper_alpha = "ABCDEFGHJKLMNPQRSTVWXYZ"
+        random_str = "".join(secrets.choice(upper_alpha) for i in range(15))
+        self.code = (random_str + random_num)[-15:]
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -44,11 +43,17 @@ class CouponType(models.Model):
     쿠폰 타입 모델, 퍼센트로 할인할지, 정액 할인할지, 아니면 둘 다 할인할지 등 새로운 쿠폰 타입을 생성할 수 있음
     둘 다 값이 있을 시, 퍼센트 먼저 적용 후 정가 할인 적용
     """
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     percent_discount = models.FloatField(default=0, null=True, blank=True)
     absolute_discount = models.FloatField(default=0,
                                           null=True,
                                           blank=True, )
+    def save(self, *args, **kwargs):
+        if self.percent_discount is None:
+            self.percent_discount = 0
+        elif self.absolute_discount is None:
+            self.absolute_discount = 0
+        return super().save(*args, **kwargs)
 
     def get_total_discount(self):
         if self.percent_discount and self.absolute_discount:
