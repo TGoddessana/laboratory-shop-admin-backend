@@ -34,6 +34,25 @@ class Coupon(models.Model):
         self.code = (random_str + random_num)[-15:]
         return super().save(*args, **kwargs)
 
+    def is_used(self):
+        """
+        :return: 현재 쿠폰이 사용되었는지, 사용되기 전인지를 반환 (boolean)
+        """
+        try:
+            if self.orderhistory:
+                return True
+        except:
+            return False
+
+    def get_used_time(self):
+        """
+        :return: 쿠폰이 사용되었다면, 언제 사용되었는지를 반환
+        """
+        if self.is_used():
+            return self.orderhistory.created_at
+        else:
+            return "Not used yet."
+
     def __str__(self):
         return f'<Coupon Objcet : {self.code}, Type : {self.coupon_type.name}>'
 
@@ -48,10 +67,11 @@ class CouponType(models.Model):
     absolute_discount = models.FloatField(default=0,
                                           null=True,
                                           blank=True, )
+
     def save(self, *args, **kwargs):
         if self.percent_discount is None:
             self.percent_discount = 0
-        elif self.absolute_discount is None:
+        if self.absolute_discount is None:
             self.absolute_discount = 0
         return super().save(*args, **kwargs)
 
@@ -62,6 +82,29 @@ class CouponType(models.Model):
             return float(self.percent_discount / 100)
         else:
             return float(self.absolute_discount)
+
+    def get_all_coupon_set_count(self):
+        """
+        :return: 해당 타입을 가지는 쿠폰의 개수를 반환
+        """
+        return self.coupon_set.count()
+
+    def get_all_used_coupon_set_count(self):
+        """
+        :return: 해당 타입을 가지는 쿠폰 중, 사용된 것의 갯수를 반환
+        """
+        coupons = self.coupon_set.all()
+        used_coupons = [coupon for coupon in coupons if coupon.is_used()]
+        return len(used_coupons)
+
+    def get_all_discount_results(self):
+        """
+        :return: 해당 쿠폰 타입으로 할인된 총액을 반환
+        """
+        coupons = self.coupon_set.all()
+        used_coupons = [coupon for coupon in coupons if coupon.is_used()]
+        all_discounts = sum([coupon.orderhistory.coupon_discount_result() for coupon in used_coupons])
+        return all_discounts
 
     def __str__(self):
         if self.percent_discount and self.absolute_discount:
@@ -125,39 +168,53 @@ class OrderHistory(TimeStampedModel):
 
         if self.order_place.country.country_tell_code == "1":
             default_dilivery_price = 10
+            self.dilivery_price = default_dilivery_price
         elif 7 <= self.order_place.country.country_tell_code <= 90:
             default_dilivery_price = 15
+            self.dilivery_price = default_dilivery_price
         elif 91 < self.order_place.country.country_tell_code <= 299:
             default_dilivery_price = 20
+            self.dilivery_price = default_dilivery_price
         elif 350 <= self.order_place.country.country_tell_code <= 599:
             default_dilivery_price = 25
+            self.dilivery_price = default_dilivery_price
         elif 670 <= self.order_place.country.country_tell_code <= 692:
             default_dilivery_price = 30
+            self.dilivery_price = default_dilivery_price
         elif 850 <= self.order_place.country.country_tell_code <= 998:
             default_dilivery_price = 35
-        self.dilivery_price = default_dilivery_price
+            self.dilivery_price = default_dilivery_price
 
-        # 쿠폰이 있으면
+        # 쿠폰이 있을 경우, result_price 값 할당
         if self.coupon:
             # 퍼센트 할인 적용, 정액 할인 적용이 둘 다 있는 쿠폰이라면, 정액 할인 적용 후 퍼센트 할인 적용
-            if self.coupon.coupon_type.percent_discount and self.coupon.coupon_type.absolute_discount:
+            if self.coupon.coupon_type.percent_discount > 0 and self.coupon.coupon_type.absolute_discount > 0:
                 result_price = (default_price + default_dilivery_price - self.coupon.coupon_type.absolute_discount) * (
                         1 - self.coupon.coupon_type.percent_discount / 100)
             # 퍼센트 할인만 있는 쿠폰이라면, 퍼센트 할인만 적용
-            elif self.coupon.coupon_type.percent_discount and self.coupon.coupon_type.absolute_discount is None:
+            elif self.coupon.coupon_type.percent_discount > 0 and self.coupon.coupon_type.absolute_discount == 0:
                 result_price = default_price + default_dilivery_price * (
                         1 - self.coupon.coupon_type.percent_discount / 100)
             # 정액 할인만 있는 쿠폰이라면, 정액 할인만 적용
-            elif self.coupon.coupon_type.percent_discount is None and self.coupon.coupon_type.absolute_discount:
+            elif self.coupon.coupon_type.percent_discount == 0 and self.coupon.coupon_type.absolute_discount > 0:
                 result_price = default_price + default_dilivery_price - self.coupon.coupon_type.absolute_discount
-            if result_price < 0:
-                self.total_price = 0
-            else:
-                self.total_price = result_price
+        # 쿠폰이 없을 경우 result_price 값 할당
         else:
-            self.total_price = default_price + default_dilivery_price
+            result_price = default_price + default_dilivery_price
+
+        if result_price < 0:
+            self.total_price = 0
+        else:
+            self.total_price = result_price
 
         return super().save(*args, **kwargs)
+
+    def coupon_discount_result(self):
+        if self.coupon:
+            default_price_with_dilivery = self.product.price * self.quantity + self.dilivery_price
+            return abs(self.total_price - default_price_with_dilivery)
+        else:
+            return 0
 
     class Meta:
         verbose_name_plural = "Order Histories"
