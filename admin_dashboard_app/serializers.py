@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Coupon, CouponType, OrderHistory, OrderPlace
+from .models import Coupon, CouponType, OrderHistory, OrderPlace, Product
 
 
 class OrderHistorySerializer(serializers.ModelSerializer):
@@ -10,7 +10,11 @@ class OrderHistorySerializer(serializers.ModelSerializer):
                                                         write_only=True)
     order_place = serializers.SerializerMethodField()
     dilivery_price = serializers.FloatField(read_only=True)
-    total_price = serializers.FloatField(read_only=True)
+    total_price = serializers.FloatField(read_only=True, )
+    product_name = serializers.SlugRelatedField(read_only=True, slug_field='name', source='product')
+    product_id = serializers.PrimaryKeyRelatedField(source='product',
+                                                    queryset=Product.objects.all(),
+                                                    write_only=True)
 
     class Meta:
         model = OrderHistory
@@ -22,7 +26,8 @@ class OrderHistorySerializer(serializers.ModelSerializer):
                   "dilivery_price",
                   "total_price",
                   "dilivery_status",
-                  "product",
+                  "product_name",
+                  "product_id",
                   "coupon",
                   "order_place",
                   "order_place_id"]
