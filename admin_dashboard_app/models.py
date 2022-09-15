@@ -28,7 +28,6 @@ class Coupon(models.Model):
         저장시 unique 한 coupon code 생성
         """
         random_num = str(randrange(100000, 9999999))
-        print(random_num)
         upper_alpha = "ABCDEFGHJKLMNPQRSTVWXYZ"
         random_str = "".join(secrets.choice(upper_alpha) for i in range(15))
         self.code = (random_str + random_num)[-15:]
@@ -165,11 +164,10 @@ class OrderHistory(TimeStampedModel):
         """
 
         default_price = self.product.price * self.quantity
-
-        if self.order_place.country.country_tell_code == "1":
+        if self.order_place.country.country_tell_code == 1:
             default_dilivery_price = 10
             self.dilivery_price = default_dilivery_price
-        elif 1 <= self.order_place.country.country_tell_code < 90:
+        elif 1 < self.order_place.country.country_tell_code < 90:
             default_dilivery_price = 15
             self.dilivery_price = default_dilivery_price
         elif 91 < self.order_place.country.country_tell_code < 299:
@@ -189,24 +187,23 @@ class OrderHistory(TimeStampedModel):
         if self.coupon:
             # 퍼센트 할인 적용, 정액 할인 적용이 둘 다 있는 쿠폰이라면, 정액 할인 적용 후 퍼센트 할인 적용
             if self.coupon.coupon_type.percent_discount > 0 and self.coupon.coupon_type.absolute_discount > 0:
-                result_price = (default_price + default_dilivery_price - self.coupon.coupon_type.absolute_discount) * (
+                result_price = (default_price + self.dilivery_price - self.coupon.coupon_type.absolute_discount) * (
                         1 - self.coupon.coupon_type.percent_discount / 100)
             # 퍼센트 할인만 있는 쿠폰이라면, 퍼센트 할인만 적용
             elif self.coupon.coupon_type.percent_discount > 0 and self.coupon.coupon_type.absolute_discount == 0:
-                result_price = default_price + default_dilivery_price * (
+                result_price = (default_price + self.dilivery_price) * (
                         1 - self.coupon.coupon_type.percent_discount / 100)
             # 정액 할인만 있는 쿠폰이라면, 정액 할인만 적용
             elif self.coupon.coupon_type.percent_discount == 0 and self.coupon.coupon_type.absolute_discount > 0:
-                result_price = default_price + default_dilivery_price - self.coupon.coupon_type.absolute_discount
+                result_price = default_price + self.dilivery_price - self.coupon.coupon_type.absolute_discount
         # 쿠폰이 없을 경우 result_price 값 할당
         else:
-            result_price = default_price + default_dilivery_price
+            result_price = default_price + self.dilivery_price
 
         if result_price < 0:
             self.total_price = 0
         else:
             self.total_price = result_price
-
         return super().save(*args, **kwargs)
 
     def coupon_discount_result(self):
